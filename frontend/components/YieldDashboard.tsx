@@ -39,6 +39,7 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { signInHref } from "@/lib/identity";
+import { PackageTestControl } from "@/components/PackageTestControl";
 import {
   METRIC_DEFINITIONS,
   SCENARIO_ORDER,
@@ -1180,6 +1181,8 @@ export function YieldDashboard() {
                 {controlPlan.gates.map((gate) => <div key={gate.label} className={`rounded-xl border p-3 ${gate.state === "pass" ? "border-[#31c7a2]/15 bg-[#31c7a2]/[0.04]" : gate.state === "watch" ? "border-[#f2b84b]/15 bg-[#f2b84b]/[0.04]" : "border-white/[0.07] bg-white/[0.018]"}`}><div className="flex items-center justify-between gap-2"><span className="text-[8px] text-[#718097]">{gate.label}</span><span className={`size-1.5 rounded-full ${gate.state === "pass" ? "bg-[#31c7a2]" : gate.state === "watch" ? "bg-[#f2b84b]" : "bg-[#69788e]"}`} /></div><p className="mt-2 text-[10px] font-medium text-[#d7e1ec]">{gate.value}</p><p className={`mt-1 text-[8px] uppercase tracking-[0.1em] ${gate.state === "pass" ? "text-[#68ddbf]" : gate.state === "watch" ? "text-[#ffd16b]" : "text-[#76859a]"}`}>{gate.state}</p></div>)}
               </div>
             </Panel>
+
+            <PackageTestControl />
 
             <Panel className="mt-4 overflow-hidden border-[#55b8f6]/18 bg-[linear-gradient(135deg,rgba(85,184,246,0.065),rgba(17,27,43,0.82)_42%,rgba(49,199,162,0.035))]">
               <div className="grid xl:grid-cols-[minmax(0,0.95fr)_minmax(360px,1.12fr)_minmax(270px,0.72fr)]">

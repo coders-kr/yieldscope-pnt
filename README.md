@@ -132,6 +132,23 @@ Baseline과 Candidate program을 같은 qualification LOT에서 비교해 변경
 - LOT Watchlist CSV 교체 업로드(기존 CSV 내보내기 포맷 재사용)
 - 브라우저 저장(localStorage), 현재 Case 기본값 복원, 전체 Case 설정 JSON 내보내기/불러오기
 
+### 0-4. Package Test Matrix — 패키지별 테스트 계획
+
+`Test Operations`에서 패키지 구조를 선택하면 양산 선별 검사와 샘플 기반 신뢰성 검증을 분리한 체크리스트를 엽니다.
+
+| 프로파일 | 중심 검증 흐름 |
+| --- | --- |
+| HBM 적층 패키지 | KGSD/wafer 이력 → DC continuity/open·short → memory function·I/O timing → thermal corner → 별도 reliability qualification |
+| 2.5D HBM SiP | HBM·logic·interposer genealogy → 경로 open/short → HBM↔logic function → SiP 열·기계 검증 |
+| 3DS / DDR5 RDIMM | 모듈 구성·rank 이력 → address/data function → speed·timing margin → module/system characterization |
+| UTV · WLP / LAR | wafer map → WLP 전기 검사 → 구조에 맞는 외관/X-ray/SAM → test vehicle 및 look-ahead reliability |
+
+- 각 항목에 `미실행 / PASS / WATCH / FAIL / N/A`, 결과·표본 수, 기준 출처 또는 증거 ID를 기록할 수 있습니다.
+- 필수 생산 gate는 결과와 증거 ID가 모두 있어야 `READY`입니다. FAIL은 `HOLD`로 표시합니다. Reliability qualification은 별도 표본 계획으로 `QUAL OPEN / QUALIFIED`를 산출합니다.
+- 예시 결과 불러오기 기능은 명시적으로 합성 샘플을 채우며 실제 SK hynix 생산 데이터가 아닙니다.
+- 선택한 프로파일은 브라우저 localStorage에 저장하고 CSV로 내보낼 수 있습니다. 다른 사용자와 공유하거나 서버에 저장하려면 별도 승인·인증 API 연결이 필요합니다.
+- 시험 항목은 공개 자료를 바탕으로 만든 예시 계획입니다. 실제 양산에서는 제품 Databook, 고객 요구, 승인된 표준 개정판 및 사내 승인 계획이 판정 기준입니다. 화면의 항목은 SK hynix의 내부 recipe를 나타내지 않습니다.
+
 LOT CSV는 다음 헤더를 사용합니다: `lot_id, product, tool, units, yield_pct, top_defect, shift, status`. `status`는 `격리`, `확인 중`, `모니터링`, `해제` 중 하나여야 합니다.
 
 저장한 설정은 차트·KPI·Release readiness·Decision Brief에 즉시 반영됩니다. 공개 데모의 입력 편의를 위한 기능이며, 사내 운영에서는 MES/TMS/Tester/Databook adapter와 승인 권한을 함께 연결하는 것을 전제로 합니다.
@@ -145,6 +162,8 @@ LOT CSV는 다음 헤더를 사용합니다: `lot_id, product, tool, units, yiel
 ### 2. Mass Production Test Flow
 
 `Wafer Sort → Package Test → Burn-in → Final Test → Reliability`를 선택하면서 단계별 FPY, DPPM, retest recovery, test time, UPH, utilization을 비교합니다.
+
+패키지별 테스트 Matrix에서는 제품/LOT 양산 screen과 표본 기반 신뢰성 qualification을 별도 lane으로 관리합니다. HBM의 MR-MUF 및 UTV/WLP/LAR 흐름, HBM이 로직 다이와 결합되는 2.5D SiP, TSV 기반 3DS 메모리 모듈처럼 구조가 다른 패키지의 공개된 차이를 반영하되, 세부 limit은 사용자가 해당 제품의 승인 자료를 기준으로 입력합니다.
 
 ### 3. Bin & Retest Triage
 
@@ -223,6 +242,13 @@ users
 | Identity | coders.kr native gate, `X-Coders-User` |
 | Runtime | nginx static service + API service + PostgreSQL |
 | Deploy | `coders.yaml` multi-service manifest |
+
+## 공개 기술 참고자료
+
+- [SK hynix Newsroom — HBM 패키지 MR-MUF, UTV/WLP 및 look-ahead reliability](https://news.skhynix.com/en/rulebreaker-revolutions-mr-muf-unlocks-hbm-heat-control/)
+- [SK hynix Newsroom — HBM·3DS·2.5D SiP 패키지 구조](https://news.skhynix.com/en/semiconductor-back-end-process-episode-4-packages-part-2/)
+- [SK hynix Newsroom — 패키지 신뢰성 평가, burn-in 및 환경 stress 시험](https://news.skhynix.com/en/semiconductor-back-end-process-episode-11-reliability-tests-and-standards-for-semiconductor-packages/)
+- [SK hynix Newsroom — HBM SiP 품질·신뢰성과 열·기계 검증 협업](https://news.skhynix.com/en/sk-hynix-spotlights-ai-memory-solutions-industry-collaboration-at-tsmc-oip-ecosystem-forum-2024/)
 
 ## 화면 설계
 
